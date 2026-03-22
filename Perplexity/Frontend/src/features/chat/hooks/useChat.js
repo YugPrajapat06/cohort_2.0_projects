@@ -9,13 +9,15 @@ export function useChat() {
     const dispatch = useDispatch();
 
     async function handleSendMessage({ message, chatId }) {
+        console.log("Hey : ",chatId);
+        
         try {
             dispatch(setLoading(true));
             const data = await sendMessage({ message, chatId });
             const { chat, aiMessage } = data
   
             // Determine the actual chat ID to use
-            const actualChatId = chat?._id || chatId;
+            const actualChatId =  chatId ? chatId : chat._id ;
             
             // For new chats, create the chat object in state
             if (!chatId) {
