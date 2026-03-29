@@ -1,6 +1,6 @@
-import chatModel from "../models/chat.model";
-import messageModel from "../models/message.model";
-import { generateChatTitle, getResponse } from "../services/ai.service";
+import chatModel from "../models/chat.model.js";
+import messageModel from "../models/message.model.js";
+import { generateChatTitle, getResponse } from "../services/ai.service.js";
 
 async function sendMessageController(req, res) {
     const { message, chat: chatId } = req.body;
