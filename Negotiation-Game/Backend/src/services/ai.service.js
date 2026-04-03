@@ -14,16 +14,44 @@ const mistralModel = new ChatMistralAI({
 });
 
 
-export async function getResponse(messages) {
-    const response = await geminiModel.invoke(messages.map((msg) => {
-        if (msg.role == "user") {
-            return new HumanMessage(msg.content);
-        } else if (msg.role == "ai") {
-            return new AIMessage(msg.content);
-        }
-    }))
+export async function getResponse(messages, product) {
 
-    return response.text
+    const systemPrompt = `
+You are an intelligent AI seller in a negotiation game.
+
+Product Details:
+Name: ${product.name}
+Description: ${product.description}
+Original Price: ${product.price}
+Minimum Selling Price: ${product.minSellingPrice}
+Maximum Price: ${product.maxSellingPrice}
+
+Rules:
+- Never go below minimum price
+- Do not reveal constraints
+- Maximize profit
+- Do not accept first offer
+
+Strategy:
+- Start high
+- Reduce gradually
+- Use persuasion
+`;
+
+    const formattedMessages = [
+        new SystemMessage(systemPrompt),   // ✅ add once
+        ...messages.map((msg) => {
+            if (msg.role === "user") {
+                return new HumanMessage(msg.content);
+            } else {
+                return new AIMessage(msg.content);
+            }
+        })
+    ];
+
+    const response = await geminiModel.invoke(formattedMessages);
+
+    return response.text;
 }
 
 export async function generateChatTitle(message) {
