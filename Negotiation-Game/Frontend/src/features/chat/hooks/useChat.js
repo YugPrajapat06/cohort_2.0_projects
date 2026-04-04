@@ -1,5 +1,5 @@
 import { sendMessage, createChatAPI,  getMessages, deleteChat } from "../services/chat.api";
-import { createChat, addNewMessage, addMessages, setCurrentChat, setChats, setLoading, setError } from "../slices/chat.slice";
+import { createChat, addNewMessage, addMessages, setCurrentChat, setChats, setLoading, setError , setUserCurrentMessage, setAICurrentMessage } from "../slices/chat.slice";
 import { useDispatch, useSelector } from "react-redux";
 import {initializeSocketConnection} from "../services/chat.socket";
 
@@ -67,6 +67,8 @@ export const useChat = () => {
                 dispatch(addNewMessage({ chatId , content: message , role: "user" }))
                 const res = await sendMessage({ message : message, chatId})
                 dispatch(addNewMessage({ chatId , content: res.aiMessage.content , role: res.aiMessage.role }))
+                dispatch(setUserCurrentMessage(message))
+                dispatch(setAICurrentMessage(res.aiMessage.content))
                 return true
             } catch (error) {
                 dispatch(setError("Failed to send message"));

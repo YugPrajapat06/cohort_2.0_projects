@@ -11,6 +11,24 @@
     }
 }
 
+@layer utilities {
+    .floating {
+        animation: float 2s ease-in-out infinite;
+        transition: all 1s linear;
+    }
+    @keyframes float {
+        0% {
+            transform: translateY(15px);
+        }
+        50% {
+            transform: translateY(0px);
+        }
+        100% {
+            transform: translateY(15px);
+        }
+    }
+}
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;

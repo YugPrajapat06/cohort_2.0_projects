@@ -18,8 +18,8 @@ const ChatSection = () => {
 
   return (
     
-      <div className="w-full mt-2 sticky bottom-0 text-white">
-        <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+      <div className="w-[90%] flex justify-center items-center mt-2 sticky bottom-0 text-white">
+        <form onSubmit={handleSubmit} className="flex gap-2 w-full items-center">
 
           <textarea
             value={message}
