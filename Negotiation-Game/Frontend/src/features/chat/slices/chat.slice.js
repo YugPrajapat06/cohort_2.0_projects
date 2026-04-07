@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setUser } from "../../auth/slices/auth.slice";
 
+
 export const chatSlice = createSlice({
     name : "chat",
     initialState : {
@@ -8,6 +9,7 @@ export const chatSlice = createSlice({
         currentChatId : null,
         userCurrentMessage: null,
         aiCurrentMessage: null,
+        finalPrice: null,
         isLoading : false,
         error : null
     },
@@ -53,9 +55,12 @@ export const chatSlice = createSlice({
         setAICurrentMessage: (state, action) => {
             state.aiCurrentMessage = action.payload;
         },
+        setFinalPrice: (state, action) => {
+            state.finalPrice = action.payload;
+        },
     }
 })
 
-export const {createChat, addNewMessage, addMessages, setCurrentChat, setChats, setLoading, setError, setUserCurrentMessage, setAICurrentMessage} = chatSlice.actions
+export const {createChat, addNewMessage, addMessages, setCurrentChat, setChats, setLoading, setError, setUserCurrentMessage, setAICurrentMessage, setFinalPrice} = chatSlice.actions
 
 export default chatSlice.reducer

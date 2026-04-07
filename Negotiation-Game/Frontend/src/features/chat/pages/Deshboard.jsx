@@ -13,10 +13,11 @@ import remarkGfm from "remark-gfm"
 
 const Deshboard = () => {
   const { currentChatId } = useSelector(state => state.chat)
-  const { chats } = useSelector(state => state.chat)
+  const isLoading = useSelector(state => state.chat.isLoading)
   const messages = useSelector(state => state.chat.chats[currentChatId]?.messages) || []
   const userCurrentMessage = useSelector(state => state.chat.userCurrentMessage)
   const aiCurrentMessage = useSelector(state => state.chat.aiCurrentMessage)
+  const finalPrice = useSelector(state => state.chat.finalPrice)
   const chat = useChat()
   const currentProduct = useSelector(state => state.product.currentProduct)
   return (
@@ -37,14 +38,15 @@ const Deshboard = () => {
           </div>
           <div className="productInfo  w-full flex flex-col p-4">
             <h2 className='text-2xl font-bold text-amber-500'>{currentProduct.name}</h2>
-            <p className='text-white flex flex-col'><span className='text-xl font-bold'>About :</span> {currentProduct.description}</p>
+            <p className='text-white flex text-sm flex-col'><span className='text-md font-bold'>About :</span> {currentProduct.description}</p>
           </div>
-          <div className="priceAndRatings p-4 ">
-            <p className='text-white '><span className='font-bold'>Price : $ </span>{currentProduct.maxSellingPrice} /-</p>
-            <p className='text-white flex items-center gap-1'><span className='font-bold '>Ratings : </span>{[...Array(5)].map((_, i) => (
+          <div className="priceAndRatings px-4 py-2 gap-0.5">
+            <p className='text-white text-sm'><span className='text-md font-bold'>Price : $ </span>{currentProduct.maxSellingPrice} /-</p>
+            <p className='text-white text-sm '><span className='font-bold text-md'>Price after discount : $ </span>{finalPrice} /-</p>
+            <p className='text-white text-sm flex items-center gap-1'><span className='font-bold text-md'>Ratings : </span>{[...Array(5)].map((_, i) => (
               <Star className='text-emerald-500' key={i} size={20} />
             ))}</p>
-            <p className='text-white flex items-center gap-1'><span className='font-bold '>GAMEPLAY : </span>{[...Array(5)].map((_, i) => (
+            <p className='text-white text-sm flex items-center gap-1'><span className='font-bold text-md'>Gameplay : </span>{[...Array(5)].map((_, i) => (
               <Swords className='text-amber-600' key={i} size={20} />
             ))}</p>
 
@@ -93,7 +95,7 @@ const Deshboard = () => {
                     }}
                     remarkPlugins={remarkGfm}
                   >
-                    {aiCurrentMessage}
+                    {isLoading? "Loading..." : aiCurrentMessage}
 
                   </ReactMarkdown>
                 </div>

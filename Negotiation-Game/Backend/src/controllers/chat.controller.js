@@ -1,3 +1,4 @@
+import { number } from "zod";
 import chatModel from "../models/chat.model.js";
 import messageModel from "../models/message.model.js";
 import productModel from "../models/product.model.js";
@@ -5,7 +6,8 @@ import { generateChatTitle, getResponse } from "../services/ai.service.js";
 
 async function sendMessageController(req, res) {
     const { message, chatId } = req.body;
-
+    
+    
     // let title = null, chat = null;
 
     if (!chatId) {
@@ -20,7 +22,8 @@ async function sendMessageController(req, res) {
         content: message,
         role: "user"
     })
-
+    // console.log("userMessage");
+    
     const messages = await messageModel.find({
         chat: chatId
     })
@@ -39,19 +42,24 @@ async function sendMessageController(req, res) {
     const productId = chat.product;
     const product = await productModel.findById(productId);
 
-    const result = await getResponse(messages, product);
+    const {result, finalPrice} = await getResponse(messages, product);
+    const discount = product.maxSellingPrice - finalPrice;
+    await productModel.findByIdAndUpdate(productId, { discount: discount });
 
     const aiMessage = await messageModel.create({
         chat: chatId,
-        content: result,
+        content: JSON.stringify(result),
         role: "ai"
     })
+    
+    
 
     res.status(200).json({
         success: true,
         message: "Message sent successfully",
         chat,
-        aiMessage
+        aiMessage,
+        finalPrice
     });
 }
 
